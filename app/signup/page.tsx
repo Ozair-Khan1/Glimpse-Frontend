@@ -16,7 +16,7 @@ export default function SignUp() {
     const router = useRouter()
 
     useEffect(() => {
-        console.log("Current user state:", user); // This will log null first, then the user object
+        console.log("Current user state:", user);
         if (user) {
             router.push('/');
         }
