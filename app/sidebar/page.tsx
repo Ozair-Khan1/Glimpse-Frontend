@@ -1,9 +1,10 @@
 "use client"
-import { PlusSquareIcon, HomeIcon, Grid2X2Icon, MenuIcon } from "lucide-react"
+import { PlusSquareIcon, HomeIcon, Grid2X2Icon, MenuIcon, SquareUserRoundIcon } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useAuth } from "../utils/authContext"
 import Image from "next/image"
+import MobileFollowComp from "../components/mobileFollowComp"
 
 
 const Sidebar = () => {
@@ -27,8 +28,9 @@ const Sidebar = () => {
 
   return (
     <>
-        <div className="w-full p-4 h-fit flex lg:hidden md:hidden align-middle items-center justify-self-start mt-">
-                <h3 className="text-white font-sans text-xl font-bold z-50" style={{letterSpacing : '2px'}}>Glimpse</h3>
+        <div className="w-full p-4 h-fit flex lg:hidden md:hidden align-middle items-center justify-between fixed top--10 z-50">
+            <h3 className="text-white font-sans text-xl font-bold z-50" style={{letterSpacing : '2px'}}>Glimpse</h3>
+            <button onClick={() => (document.getElementById('follow-comp') as HTMLDialogElement)?.showModal()} className="bg-gray-800 p-3 rounded-lg"><SquareUserRoundIcon/></button>
         </div>
         <div className="w-screen flex justify-center items-center mx-auto">
             <div className="fixed bg-transparent lg:top-0 lg:left-0 md:top-0 md:left-0 bottom-0 nav-main-div w-full lg:w-fit md:w-fit lg:h-screen h-fit lg:p-4 px-4 pt-4 flex lg:flex-col md:flex-col flex-row gap-70 text-white z-50" onMouseEnter={() => setIsVisible(true)} onMouseLeave={() => setIsVisible(false)}>
@@ -95,7 +97,8 @@ const Sidebar = () => {
                         <li><button onClick={handleLogut}>Log out</button></li> 
                     </ul>
                 </div>
-            </div>         
+            </div>
+            <MobileFollowComp />         
         </div>
     </>
   )
