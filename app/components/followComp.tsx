@@ -12,7 +12,6 @@ interface SuggestedUsers {
     profilePicture: string
 }
 
-
 export default function FollowComp() {
 
     const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUsers[]>([]);
@@ -37,7 +36,7 @@ export default function FollowComp() {
         fetchSuggested();
     }, []);
  
-    const handleFollow = async (userId: any) => {
+    const handleFollow = async (userId: string) => {
 
         setLoading(true)
 
