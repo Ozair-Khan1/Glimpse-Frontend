@@ -1,5 +1,4 @@
 "use client"
-import { useAuth } from '@/app/utils/authContext';
 import FollowComp from '../../components/followComp';
 import PostComp from '../../components/postComp';
 import StoriesComp from '../../components/storiesComp';

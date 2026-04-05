@@ -110,3 +110,11 @@ body {
         max-width: 700px !important;
     }
 }
+
+@media screen and (max-width: 380px) {
+    
+    .change-bio-display {
+        flex-direction: column !important;
+    }
+
+}

@@ -1,7 +1,14 @@
 'use client'
+
+import { useRouter } from "next/navigation"
 import { useAuth } from "./utils/authContext"
+import { useEffect } from "react"
 
 const StartingPage = () => {
+
+  const {checkUserStatus} = useAuth()
+
+  checkUserStatus()
 
   return (
     <div className="flex flex-col h-screen w-screen items-center justify-center align-middle">

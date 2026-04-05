@@ -1,8 +1,9 @@
 'use client'
 import { X } from "lucide-react";
 import Image from "next/image"
-import React, { ChangeEvent, FormEvent, useRef, useState } from "react"
+import React, { ChangeEvent, useRef, useState } from "react"
 import api from "../utils/api";
+import { useAuth } from "../utils/authContext";
 
 
 interface ImagePreview {
@@ -14,7 +15,7 @@ interface User {
     pfp: string;
 }
 
-export default function CreateModal({username, pfp}: User) {
+export default function AddPfp({username, pfp}: User) {
 
     const [step, setStep] = useState(1)
 
@@ -22,6 +23,8 @@ export default function CreateModal({username, pfp}: User) {
     const [captionData, setCaptionData] = useState({
         caption: ''
     });
+
+    const {checkUserStatus} = useAuth()
 
     const [loading, setLoading] = useState(false)
     
@@ -50,27 +53,25 @@ export default function CreateModal({username, pfp}: User) {
 
         if(!selectedFile) return
 
-        const formData = new FormData()
+        const pfp = new FormData()
 
 
-        formData.append('image', selectedFile)
-        formData.append('caption', captionData.caption || '')
+        pfp.append('image', selectedFile)
 
         setLoading(true)
 
         try {
             
-            const res = await api.post('/api/post/create-post', formData);
+            await api.post('/api/auth/add-pfp', pfp);
+            await api.post('api/auth/add-bio', {bio: captionData.caption || ''});
+            
+            checkUserStatus()
 
-            (document.getElementById('create-modal') as HTMLDialogElement).close();
+            (document.getElementById('add-pfp') as HTMLDialogElement).close();
             captionData.caption = ''
             setStep(1);
             setPreviews([]);
             setSelectedFile(null);
-
-            await api.get('/api/post/posts')
-
-            window.location.reload()
 
         } catch (error) {
             console.log(error)
@@ -82,7 +83,7 @@ export default function CreateModal({username, pfp}: User) {
 
     const handleClose = () => {
 
-        (document.getElementById('create-modal') as HTMLDialogElement).close();
+        (document.getElementById('add-pfp') as HTMLDialogElement).close();
 
         setStep(1);
 
@@ -93,12 +94,12 @@ export default function CreateModal({username, pfp}: User) {
     }
 
     return (
-        <dialog id="create-modal" className="modal backdrop-blur-md overflow-hidden" onKeyDown={(e) => {
+        <dialog id="add-pfp" className="modal backdrop-blur-md overflow-hidden" onKeyDown={(e) => {
             if (e.key === 'Escape') {
             e.preventDefault();
             }
         }}>
-            <div className="modal-box w-11/12 max-w-2xl backdrop-blur-md h-9/12 p-5 bg-[#22262B] flex flex-col items-center align-middle mt-2 gap-15 overflow-hidden">
+            <div className="modal-box w-11/12 max-w-2xl backdrop-blur-md h-9/12 p-5 bg-[#22262B] flex flex-col items-center align-middle mt-2 gap-15 overflow-hidden cursor-auto">
             <div className="flex justify-between align-middle bg-[#0C1014] w-full p-5 rounded-xl">
                 <h3 className="text-white font-sans text-xl font-bold" style={{letterSpacing : '2px'}}>Glimpse</h3>
                 <div className="modal-action m-0">
@@ -156,10 +157,11 @@ export default function CreateModal({username, pfp}: User) {
 
                     <div className="px-4 flex flex-col justify-start h-full">
                         <textarea 
-                            placeholder="Write a caption..."
+                            placeholder="Add bio..."
                             value={captionData.caption}
                             onChange={(e) => setCaptionData({ ...captionData, caption: e.target.value })}
                             disabled={loading}
+                            name="bio"
                             className="w-full h-full flex-1 bg-transparent border-none outline-none resize-none text-sm text-white placeholder:text-[#8e8e8e]"
                         />
                         <span className="flex justify-between p-2 text-xs text-gray-500">{captionData?.caption?.length || 0} / 2200</span>

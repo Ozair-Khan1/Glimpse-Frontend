@@ -2,8 +2,8 @@
 import { PlusSquareIcon, HomeIcon, Grid2X2Icon, MenuIcon } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { usePathname } from "next/navigation"
 import { useAuth } from "../utils/authContext"
+import Image from "next/image"
 
 
 const Sidebar = () => {
@@ -12,10 +12,10 @@ const Sidebar = () => {
     const [create, setCreate] = useState(false)
     const[more, setMore] = useState(false)
     const [changeBg, setChangeBg] = useState(false)
-    
     const [isVisible, setIsVisible] = useState(false)
-
     const {logout} = useAuth()
+
+    const {user} = useAuth()
 
     const handleLogut = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
@@ -53,8 +53,8 @@ const Sidebar = () => {
                     <Link className={`flex items-center gap-4 p-3 m-0 rounded-lg hover:bg-gray-800 transition-colors group`} href='/profile' onClick={() => {setHome(false),  setCreate(false), setMore(false), setProfile(true)}}>
                         <div className={`relative group-hover:scale-110 ${profile ? 'bg-gray-800 p-2 rounded-lg' : ''} transition-all duration-400`}>
                            <div className="avatar size-6">
-                                <div className=" rounded-full">
-                                    <img src="https://img.daisyui.com/images/profile/demo/yellingwoman@192.webp" />
+                                <div className="bg-white rounded-full">
+                                    <Image src={user?.pfp || 'https://ik.imagekit.io/glimpse/avatar.png'} height={64} width={64} className="object-cover" alt="Pfp"></Image>
                                 </div>
                             </div>
                         </div>

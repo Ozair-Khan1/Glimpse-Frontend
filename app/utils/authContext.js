@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const AuthContext = createContext()
 
+
 export const AuthProvider = ({children}) => {
 
     const pathName = usePathname()
@@ -17,18 +18,15 @@ export const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true)
 
     const checkUserStatus = async () => {
-
-        if(pathName === '/signup') {
-            setLoading(false)
-            return
-        }
-
         try {
+            console.log('checking')
             const session = await api.get('/api/auth/get-user')
-            setUser(session.data.user)
+            setUser(session.data)
 
             if(session.data.user) {
                 router.push('/home')
+            } else {
+                router.push('/signup')
             }
         } catch (error) {
             setUser(null)

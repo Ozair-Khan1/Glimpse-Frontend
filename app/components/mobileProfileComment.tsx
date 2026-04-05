@@ -18,10 +18,9 @@ interface commentInterface {
   text: string,
   createdAt: string
 }
+const MobileProfileComment = ({postId}) => {
 
-export default function PostComments({postId, isActive}) {
-
-  const [comments, setComments] = useState<commentInterface[]>([])
+    const [comments, setComments] = useState<commentInterface[]>([])
 
   const [formData, setFormData] = useState('')
 
@@ -57,7 +56,7 @@ export default function PostComments({postId, isActive}) {
     } catch (error) {
       console.log(error)
     } finally {
-      setAdding(false)
+        setAdding(false)
     }
     
 
@@ -76,15 +75,14 @@ export default function PostComments({postId, isActive}) {
       }
 
     }
-
     useEffect(() => {
-      if(isActive && postId) {
-        getComments()
-      }
-    }, [isActive, postId])
+        if(postId) {
+            getComments()
+        }
+    }, [postId])
 
   return (
-    <dialog id={postId} className="modal backdrop-blur-md">
+    <dialog id={`comment-${postId}`} className="modal backdrop-blur-md">
       <div className="modal-box w-11/12 max-w-xl bg-[#0C1014] p-0 overflow-hidden flex flex-col h-[70vh] border border-gray-800 shadow-2xl">
         
         <div className="flex justify-between items-center p-5 border-b border-gray-800 bg-[#0C1014] z-10">
@@ -120,9 +118,9 @@ export default function PostComments({postId, isActive}) {
 
         </div>
         <div className="p-4 bg-[#0C1014] border-t border-gray-800">
-          <form className="flex flex-col justify-center items-center gap-3" onSubmit={handleAddComment}>
+          <form className="flex flex-col items-center gap-3" onSubmit={handleAddComment}>
             {error && (
-                 <span className="text-sm text-red-500 font-bold">Write something..</span>
+                <span className="text-sm text-red-500 font-bold">Write something..</span>
             )}
             <div className="flex gap-3 w-full">
               <input 
@@ -131,13 +129,13 @@ export default function PostComments({postId, isActive}) {
                 value={formData}
                 onChange={(e) => {setFormData(e.target.value); setError(false)}}
                 className={`input input-bordered w-full bg-[#161b22] focus:outline-none h-11 ${error ? 'border-red-500' : 'border-gray-700 text-sm focus:border-green-600'}`}
+                disabled={adding}
               />
               <button 
-                type="submit" 
-                className="btn bg-green-700 hover:bg-green-600 border-none text-white px-6 h-11 min-h-0"
-                disabled={adding}
-              >
-                Post
+              type="submit" 
+              className="btn bg-green-700 hover:bg-green-600 border-none text-white px-6 h-11 min-h-0"
+            >
+              Post
             </button>
             </div>
           </form>
@@ -145,5 +143,7 @@ export default function PostComments({postId, isActive}) {
 
       </div>
     </dialog>
-  );
+  )
 }
+
+export default MobileProfileComment
