@@ -19,15 +19,23 @@ export const AuthProvider = ({children}) => {
 
     const checkUserStatus = async () => {
         try {
-            console.log('checking')
             const session = await api.get('/api/auth/get-user')
             setUser(session.data)
 
-            if(session.data.user) {
+            if(!session.data.user && pathName === '/') {
+                router.push('/signup')
+            } else if(session.data.user && pathName === '/') {
                 router.push('/home')
-            } else {
+            } else if(session.data.user && pathName === '/home') {
+                router.push('/home')
+            } else if(session.data.user && pathName === '/profile') {
+                router.push('/profile')
+            } else if(session.data.user && pathName === '/signup' || pathName === '/login') {
+                router.push('/home')
+            } else if(!session.data.user) {
                 router.push('/signup')
             }
+            
         } catch (error) {
             setUser(null)
             router.push('/signup')

@@ -16,6 +16,7 @@ interface Post {
   pfpImage: string;
   postId: string
   handleLike: (id: string) => Promise<void>;
+  isLiked:boolean;
 }
 
 interface userInterface {
@@ -31,7 +32,7 @@ interface commentInterface {
   createdAt: string
 }
 
-export default function ProfilePost({image, caption, pfpImage, username, likes, postId, handleLike}: Post) {
+export default function ProfilePost({image, caption, pfpImage, username, likes, postId, handleLike, isLiked}: Post) {
 
     const [comments, setComments] = useState<commentInterface[]>([])
 
@@ -117,7 +118,7 @@ export default function ProfilePost({image, caption, pfpImage, username, likes, 
                                 <Image src={pfpImage} alt="pic" className="object-cover rounded-full" fill/>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-start gap-5 w-full h-fit">
+                        <div className="flex flex-col justify-start gap-3 w-full h-fit">
                             <p className="text-sm">
                                 <span className="font-bold mr-2 text-[15px]">{username}</span>
                                 {caption}
@@ -125,7 +126,7 @@ export default function ProfilePost({image, caption, pfpImage, username, likes, 
                             <div className="flex gap-3 items-center">
                                 <div className="flex items-center align-middle">
                                 <label className='swap' onClick={() => handleLike(postId)}>
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" checked={isLiked} readOnly/>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="swap-off lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
                                         </svg>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="30" viewBox="0 0 24 24" fill="#d10000" stroke="#d10000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="swap-on lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>

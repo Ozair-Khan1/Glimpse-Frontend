@@ -38,6 +38,12 @@ export default function CreateModal({username, pfp}: User) {
         if (!fileList || fileList.length === 0) return;
 
         const file = fileList[0];
+
+        if(file && !file.type.startsWith('image/')) {
+            alert('Please select an image')
+            return
+        }
+
         setSelectedFile(file);
 
         const localUrl = URL.createObjectURL(file);
@@ -60,7 +66,7 @@ export default function CreateModal({username, pfp}: User) {
 
         try {
             
-            const res = await api.post('/api/post/create-post', formData);
+            await api.post('/api/post/create-post', formData);
 
             (document.getElementById('create-modal') as HTMLDialogElement).close();
             captionData.caption = ''
@@ -119,7 +125,7 @@ export default function CreateModal({username, pfp}: User) {
                         ref={fileInputRef}
                         onChange={handleFolderSelect}
                         style={{ display: 'none' }}
-                        accept="image/*"
+                        accept=".jpg, .jpeg, .png, .webp"
                     />
                     <button 
                         className="btn btn-primary" 
@@ -132,12 +138,12 @@ export default function CreateModal({username, pfp}: User) {
              ) : (
                 <div className="flex h-full w-full align-middle items-center overflow-hidden rounded-lg">
                     {previews.map((image, index) => (
-                        <div key={index} className={`relative flex-1 h-full w-full`}>
+                        <div key={index} className={`relative hide-preview flex-1 h-full w-full`}>
                             <Image 
                             src={image.url}
                             alt="Post preview"
                             fill
-                             className={`object-contain relative rounded-lg`}
+                            className={`object-contain relative rounded-lg`}
                             priority
                             />
                         </div>

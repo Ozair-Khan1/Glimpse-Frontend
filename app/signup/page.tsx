@@ -134,17 +134,17 @@ export default function SignUp() {
     }
 
     useEffect(() => {
-              let interval: NodeJS.Timeout | undefined;
+        let interval: NodeJS.Timeout | undefined;
       
-              if (timer > 0) {
-                  interval = setInterval(() => {
-                      setTimer((prev) => prev - 1);
-                  }, 1000);
-              } else {
-                  setCanResend(true);
-                  clearInterval(interval)
-              }
-              return () => clearInterval(interval)
+        if (timer > 0) {
+                interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        } else {
+             setCanResend(true);
+             clearInterval(interval)
+        }
+        return () => clearInterval(interval)
     }, [timer]);
 
     const handleVerifyCode = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -203,7 +203,7 @@ export default function SignUp() {
 
     return (
         <>
-            <div className="flex flex-col max-w-[600px] w-screen h-screen justify-center py-10 items-center">
+            <div className="flex flex-col max-w-[600px] w-screen h-fit justify-center py-10 items-center">
                 <div className="flex flex-col gap-5 w-full justify-center items-center h-fit border border-[#1f2b36] rounded-xl p-5">
                     <div className="flex w-full h-fit gap-2 justify-start align-middle items-center">
                         <div className="avatar size-6">

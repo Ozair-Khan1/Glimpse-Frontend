@@ -41,6 +41,12 @@ export default function AddPfp({username, pfp}: User) {
         if (!fileList || fileList.length === 0) return;
 
         const file = fileList[0];
+
+        if(file && !file.type.startsWith('image/')) {
+            alert('Please select an image')
+            return
+        }
+
         setSelectedFile(file);
 
         const localUrl = URL.createObjectURL(file);
@@ -120,7 +126,7 @@ export default function AddPfp({username, pfp}: User) {
                         ref={fileInputRef}
                         onChange={handleFolderSelect}
                         style={{ display: 'none' }}
-                        accept="image/*"
+                        accept=".jpg, .jpeg, .png, .webp"
                     />
                     <button 
                         className="btn btn-primary" 
@@ -133,12 +139,12 @@ export default function AddPfp({username, pfp}: User) {
              ) : (
                 <div className="flex h-full w-full align-middle items-center overflow-hidden rounded-lg">
                     {previews.map((image, index) => (
-                        <div key={index} className={`relative flex-1 h-full w-full`}>
+                        <div key={index} className={`relative hide-preview flex-1 h-full w-full`}>
                             <Image 
                             src={image.url}
                             alt="Post preview"
                             fill
-                             className={`object-contain relative rounded-lg`}
+                            className={`object-contain relative rounded-lg`}
                             priority
                             />
                         </div>
@@ -165,7 +171,7 @@ export default function AddPfp({username, pfp}: User) {
                             className="w-full h-full flex-1 bg-transparent border-none outline-none resize-none text-sm text-white placeholder:text-[#8e8e8e]"
                         />
                         <span className="flex justify-between p-2 text-xs text-gray-500">{captionData?.caption?.length || 0} / 2200</span>
-                        <button type="button" onClick={handlePost} className="btn btn-success" disabled={loading}>Post</button>
+                        <button type="button" onClick={handlePost} className="btn btn-success" disabled={loading}>Add</button>
                     </div>
                 </div>
 

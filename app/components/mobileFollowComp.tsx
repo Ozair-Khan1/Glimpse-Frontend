@@ -91,7 +91,7 @@ const MobileFollowComp = () => {
                         <Image src={User.profilePicture} alt="User" width={64} height={64} className="object-cover" />
                         </div>
                     </div>
-                    <Link href={`/user/${User._id}`}>{User.username}</Link>
+                    <Link href={`/user/${User._id}`} onClick={() => (document.getElementById('follow-comp') as HTMLDialogElement)?.close()}>{User.username}</Link>
                     </div>
                     <div className="block">
                     <button disabled={loading} className="btn btn-primary" onClick={() => handleFollow(User?._id)}>

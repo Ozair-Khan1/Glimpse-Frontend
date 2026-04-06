@@ -17,19 +17,25 @@ export default function FollowComp() {
     const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUsers[]>([]);
 
     const [following, setFollowing] = useState<any>(null)
+    
+    const [suggestedFollowing, setSuggestedFollowing] = useState(false)
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState('')
 
     const {user} = useAuth()
 
     useEffect(() => {
         const fetchSuggested = async () => {
+            setSuggestedFollowing(true)
+
             try {
                 const res = await api.get('/api/auth/get-all-user');
                 console.log(res.data)
                 setSuggestedUsers(res.data.users);
             } catch (error) {
                 console.error("Failed to load suggestions", error);
+            } finally {
+                setSuggestedFollowing(false)
             }
         };
 
@@ -38,7 +44,7 @@ export default function FollowComp() {
  
     const handleFollow = async (userId: string) => {
 
-        setLoading(true)
+        setLoading(userId)
 
         try {
             
@@ -51,7 +57,7 @@ export default function FollowComp() {
         } catch (error) {
             console.log(error)
         } finally {
-            setLoading(false)
+            setLoading(userId)
         }
 
     }
@@ -70,7 +76,12 @@ export default function FollowComp() {
                     </div>
                 </div>
                 <div className="divider divider-primary">Suggestions for you</div>
-                {suggestedUsers.length > 0 ? (
+                {suggestedFollowing ? (
+                    <div className="flex justify-center items-center h-fit w-full">
+                        <span className="loading loading-infinity loading-xl w-10"></span>
+                    </div>
+                ) : (
+                    suggestedUsers.length > 0 ? (
                     suggestedUsers.map((User) => (
                         <div key={User._id} className="flex items-center align-middle justify-between space-x-3 max-w-[318px] w-full">
                             <div className="flex gap-4 text-nowrap items-center align-middle">
@@ -82,7 +93,7 @@ export default function FollowComp() {
                                  <Link href={`/user/${User._id}`}>{User.username}</Link>
                             </div>
                             <div className="block">
-                                <button disabled={loading} className="btn btn-primary" onClick={() => handleFollow(User?._id)}> {following?.user.followers.includes(user?.user) ? 'Unfollow' : 'Follow'} </button>
+                                <button disabled={loading === User._id} className="btn btn-primary" onClick={() => handleFollow(User?._id)}> {following?.user.followers.includes(user?.user) ? 'Unfollow' : 'Follow'} </button>
                             </div>
                         </div>
                     ))
@@ -90,6 +101,7 @@ export default function FollowComp() {
                     <div className="flex justify-center items-center">
                         <span>No Users Found</span>
                     </div>
+                )
                 )}  
                 <div className="block mt-4">
                 <p className="text-gray-400">© 2026 Glimpse from <Link href='https://ok-folio.vercel.app/' className="text-[#0D6EFD] font-bold hover:text-[#0446aa] transition-all duration-200" target="_blank">OK-Folio</Link></p>

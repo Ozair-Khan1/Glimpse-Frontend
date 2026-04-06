@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Instagram Clone",
+  title: "Glimpse",
   description: "Full-stack Instagram Clone",
+  icons: {
+    icon: '/favicon.ico'
+  }
 };
 
 export default function RootLayout({
@@ -27,7 +30,7 @@ export default function RootLayout({
     <html lang="en"  className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col items-center w-full" suppressHydrationWarning>
         <AuthProvider>
-          <main className="flex flex-col items-center mx-auto">
+          <main className="flex flex-col items-center">
             {children}
           </main>
         </AuthProvider>
