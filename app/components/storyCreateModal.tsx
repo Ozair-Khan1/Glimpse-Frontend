@@ -25,15 +25,13 @@ export default function StoryCreateModal() {
 
                 const allFiles = Array.from(fileList);
                 
-                // Filter for images and create preview objects
                 const imageFiles = allFiles
                 .filter((file) => file.type.startsWith('image/'))
                 .map((file) => ({
-                    url: URL.createObjectURL(file), // Creates a temporary browser URL
+                    url: URL.createObjectURL(file),
                     name: file.name,
                 }));
 
-                // Update state (appending to existing or replacing)
                 setPreviews(imageFiles);
                 setStep(2)
             };

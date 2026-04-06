@@ -30,7 +30,6 @@ export default function FollowComp() {
 
             try {
                 const res = await api.get('/api/auth/get-all-user');
-                console.log(res.data)
                 setSuggestedUsers(res.data.users);
             } catch (error) {
                 console.error("Failed to load suggestions", error);
