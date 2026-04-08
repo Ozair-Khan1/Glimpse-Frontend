@@ -11,7 +11,7 @@ export default function MainLayout({
     <AuthProvider>
       <div className="min-h-full flex flex-col w-full" suppressHydrationWarning>
         <Sidebar />
-        <main className="flex flex-col mx-auto">
+        <main className="flex flex-col mx-auto items-center max-w-[1460px] w-full">
           {children}
         </main>
       </div>

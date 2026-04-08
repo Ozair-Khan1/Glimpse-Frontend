@@ -7,6 +7,7 @@ import api from "../utils/api";
 import { useAuth } from "../utils/authContext";
 import Link from "next/link";
 import MobileProfileComment from "./mobileProfileComment";
+import { formatDistanceToNow } from "date-fns";
 
 interface Post {
   caption: string;
@@ -134,7 +135,7 @@ export default function ProfilePost({image, caption, pfpImage, username, likes, 
                                 </label>
                                 <span className="font-bold">{likes}</span>
                             </div>
-                            <div className="flex lg:hidden md:hidden align-middle items-center gap-1" onClick={() =>  (document.getElementById(`comment-${postId}`) as HTMLDialogElement)?.showModal()}>
+                            <div className="flex lg:hidden md:hidden align-middle items-center gap-1" onClick={() =>  {(document.getElementById(`comment-${postId}`) as HTMLDialogElement)?.showModal()}}>
                                 <MessageCircle className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" />
                                 <span>{comments.length}</span>
                             </div>
@@ -155,11 +156,12 @@ export default function ProfilePost({image, caption, pfpImage, username, likes, 
                                             <Image src={User.user.profilePicture} alt="pic" className="object-cover rounded-full" fill/>
                                         </div>
                                     </div>
-                                    <div className="flex w-full h-fit">
-                                        <p className="text-sm">
-                                            <Link href={`${User.user._id === user?.user ? '/profile' : `/user/${User.user._id}`}`} className="font-bold mr-2">{User.user.username}</Link>
-                                            {User.text}
-                                        </p>
+                                    <div className="flex flex-col w-full h-fit">
+                                        <div className="text-sm">
+                                            <Link href={`${User.user._id === user?.user ? '/profile' : `/user/${User.user._id}`}`} className="font-bold mr-2 text-white hover:underline cursor-pointer">{User.user.username}</Link>
+                                            <span className="text-xs text-gray-500">• {User.createdAt ? formatDistanceToNow(new Date(User.createdAt)) + ' ago' : 'Just now'}</span>
+                                        </div>
+                                        <p className="text-sm">{User.text}</p>
                                     </div>
                                     </div>
                                 ))
@@ -184,7 +186,7 @@ export default function ProfilePost({image, caption, pfpImage, username, likes, 
                                 className="btn bg-green-700 hover:bg-green-600 border-none text-white px-4 h-11 min-h-0"
                                 disabled={adding}
                                 >
-                                Post
+                                {adding ? <span className="loading loading-infinity loading-xl"></span> : 'Add'}
                             </button>
                             </div>
                         </form>

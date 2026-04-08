@@ -121,7 +121,7 @@ export default function PostComp() {
     return (
         <div className='flex w-full h-full flex-col gap-10'>
             {loading ? (
-                <div className="skeleton max-w-116 w-full max-h-[727px] h-full border border-gray-800"></div>
+                <div className="skeleton max-w-116 w-full max-h-[727px] h-full border border-gray-800 mx-auto"></div>
             ) : (
                 suggestedPost.length > 0 ? (
                 suggestedPost.map((User) => (

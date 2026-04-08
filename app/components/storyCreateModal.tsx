@@ -2,6 +2,7 @@
 import { X } from "lucide-react";
 import Image from "next/image"
 import { ChangeEvent, useRef, useState } from "react"
+import api from "../utils/api";
 
 
 interface ImagePreview {
@@ -11,30 +12,81 @@ interface ImagePreview {
 export default function StoryCreateModal() {
 
     const [step, setStep] = useState(1)
+
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false)
     
-        const fileInputRef = useRef<HTMLInputElement>(null);
-            const [previews, setPreviews] = useState<ImagePreview[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [previews, setPreviews] = useState<ImagePreview[]>([]);
 
-            const handleButtonClick = (): void => {
-                fileInputRef.current?.click();
-            };
+    const handleButtonClick = (): void => {
+           fileInputRef.current?.click();
+    };
 
-            const handleFolderSelect = (event: ChangeEvent<HTMLInputElement>): void => {
-                const fileList = event.target.files;
-                if (!fileList) return;
+     const handleFolderSelect = async (event: ChangeEvent<HTMLInputElement>) =>  {
+        const fileList = event.target.files;
 
-                const allFiles = Array.from(fileList);
+        if (!fileList || fileList.length === 0) return;
+
+        const file = fileList[0];
+
+        if(file && !file.type.startsWith('image/')) {
+            alert('Please select an image')
+            return
+        }
+
+        setSelectedFile(file);
+
+        const localUrl = URL.createObjectURL(file);
                 
-                const imageFiles = allFiles
-                .filter((file) => file.type.startsWith('image/'))
-                .map((file) => ({
-                    url: URL.createObjectURL(file),
-                    name: file.name,
-                }));
+        setPreviews([{ url: localUrl }]);
+        setStep(2);
+    };
 
-                setPreviews(imageFiles);
-                setStep(2)
-            };
+    const handlePost = async () => {
+
+        if(!selectedFile) return
+
+        const formData = new FormData()
+
+
+        formData.append('image', selectedFile)
+
+        setLoading(true)
+
+        try {
+            
+            await api.post('/api/story/add-story', formData);
+
+            (document.getElementById('create-story') as HTMLDialogElement).close();
+            setStep(1);
+            setPreviews([]);
+            setSelectedFile(null);
+
+            await api.get('/api/story/get-follower-story')
+
+            window.location.reload()
+
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+
+    }
+
+    const handleClose = () => {
+
+        (document.getElementById('create-story') as HTMLDialogElement).close();
+
+        setStep(1);
+
+        setPreviews([]);
+
+        setSelectedFile(null);
+
+    }
+
     
     return (
         <dialog id="create-story" className="modal backdrop-blur-md overflow-hidden">
@@ -43,7 +95,7 @@ export default function StoryCreateModal() {
                 <h3 className="text-white font-sans text-xl font-bold" style={{letterSpacing : '2px'}}>Glimpse</h3>
                 <div className="modal-action m-0">
                 <form method="dialog">
-                    <button className="btn btn-sm btn-circle btn-ghost text-gray-400 hover:text-white"><X /></button>
+                    <button className="btn btn-sm btn-circle btn-ghost text-gray-400 hover:text-white" onClick={handleClose}><X /></button>
                 </form>
                  </div>
              </div>
@@ -59,7 +111,7 @@ export default function StoryCreateModal() {
                         ref={fileInputRef}
                         onChange={handleFolderSelect}
                         style={{ display: 'none' }}
-                        accept="image/*"
+                        accept=".jpg, .jpeg, .png, .webp"
                     />
                     <button 
                         className="btn btn-primary" 
@@ -82,9 +134,7 @@ export default function StoryCreateModal() {
                         />
                     </div>
                 ))}
-                <form>
-                    <button className="btn btn-success font-bold">Add Story</button>
-                </form>
+                    <button className="btn btn-success font-bold" onClick={handlePost} disabled={loading}>Add Story</button>
             </div>
             )}
             </div>

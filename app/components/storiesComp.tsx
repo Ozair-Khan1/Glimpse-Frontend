@@ -1,11 +1,36 @@
+'use client'
+
 import Image from "next/image"
 import { X, MessageCircleMoreIcon } from 'lucide-react';
 import CommentsModal from './storiesComment';
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import api from "../utils/api";
+import StoryModal from "./storyModal";
+import { useAuth } from "../utils/authContext";
 
+
+interface Author {
+  _id: string;
+  profilePicture: string;
+  username: string;
+}
+
+interface Story {
+  author: Author;
+  comments: [];
+  likes: string[];
+  imageUrl: string;
+  _id: string;
+  createdAt: string;
+}
 
 export default function StoriesComp() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false)
+  
+  const {user} = useAuth()
+
+  const [story, setStory] = useState<Story[]>([])
 
 const handleMouseDown = (e: React.MouseEvent) => {
   const slider = scrollRef.current;
@@ -28,72 +53,85 @@ const handleMouseDown = (e: React.MouseEvent) => {
   window.addEventListener('mouseup', onMouseUp);
 };
 
-const stories = Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    username: `user_${i + 1}`,
-    img: "/test-img.png",
-  }));
+useEffect(() => {
+
+  const getStory = async () => {
+
+    setLoading(true)
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    try {
+      
+      const res = await api.get('/api/story/get-follower-story')
+
+      setStory(res.data)
+
+    } catch (error) {
+      console.log(error)    
+    } finally {
+      setLoading(false)
+    }
+    
+  }
+
+  getStory()
+}, [])
+
+const handleLike = async (_id) => {
+
+try {
+            
+  const res = await api.post(`/api/story/like-story/${_id}`)
+
+  const newData = res.data.updatedStory
+
+  setStory((prev) => 
+      prev.map((story) => story._id === _id ? newData : story)
+  );
+
+  
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 return (
     <>
-      <div className="">
+      <div className="flex justify-center max-w-116 w-full overflow-hidden">
           <div 
             ref={scrollRef}
             onMouseDown={handleMouseDown}
-            className="flex items-center w-full reduce-stories-width max-w-117  border border-gray-800 rounded-lg py-4 px-4 gap-4 overflow-x-auto scroll-x-mandatory scroll-smooth scrollbar-hide select-none"
+            className="flex items-center reduce-stories-width justify-center max-w-116 w-full border border-gray-800 rounded-lg py-4 px-4 gap-4 overflow-x-auto scroll-x-mandatory scroll-smooth scrollbar-hide select-none"
           >
-        {stories.map((story) => (
-          <div 
-            key={story.id} 
-            className="flex flex-col items-center gap-1 flex-shrink-0 scroll-snap-align-start cursor-pointer"
-            onClick={() => (document.getElementById('story-modal') as HTMLDialogElement)?.showModal()}
-          >
-            <div className="p-[2px] rounded-full">
-              <div className="bg-black p-[2px] rounded-full">
-                <div className="relative h-16 w-16 overflow-hidden rounded-full">
-                  <Image src={story.img} alt={story.username} fill sizes="100" className="object-cover" />
-                </div>
+          {loading ? (
+            <div className="skeleton max-w-116 w-full h-[125.45]">
+            </div>
+          ) : (
+            story.length > 0 ? (
+            story.map((story) => (
+              <div  
+                  className="flex flex-col items-center gap-1 scroll-snap-align-start cursor-pointer w-fit"
+                  onClick={() => (document.getElementById(`story-${story._id}`) as HTMLDialogElement)?.showModal()}
+                  key={story._id}
+                >
+                  <div className="p-[2px] rounded-full">
+                    <div className="bg-black p-[2px] rounded-full">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-full">
+                        <Image src={story.author.profilePicture} alt={story.author.username} fill sizes="100" className="object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-gray-300 text-sm truncate text-center">{story.author.username}</span>
+                  <StoryModal createdAt={story.createdAt} comments={story.comments} likes={story.likes.length} imageURL={story.imageUrl} _id={story._id} handleLike={handleLike} isLiked={story.likes.includes(user?.user) ? true : false}/>
+                  <CommentsModal _id={story._id}/>
               </div>
-            </div>
-            <span className="text-xs text-gray-300 truncate w-16 text-center">{story.username}</span>
-          </div>
-        ))}
+            ))
+          ) : (
+            <span>No story yet</span>
+          )
+          )}
       </div>
-      <dialog id="story-modal" className="modal backdrop-blur-md overflow-hidden">
-        <div className="modal-box w-11/12 max-w-2xl backdrop-blur-md h-[90vh] p-5 bg-[#0C1014] flex flex-col justify-center mt-2">
-          <div className="flex justify-between align-middle">
-            <h3 className="text-white font-sans text-xl font-bold" style={{letterSpacing : '2px'}}>Glimpse</h3>
-            <div className="modal-action m-0">
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost text-gray-400 hover:text-white"><X /></button>
-              </form>
-            </div>
-          </div>
-          <div className="flex justify-center items-center h-full py-4"> 
-            <div className="relative h-full w-full bg-black rounded-xl border border-gray-800">
-              <Image
-                src="/test-img.png"
-                alt="username"
-                fill
-                className="object-contain"
-                loading="eager"
-                sizes='100'
-              />
-            </div>
-          </div>
-          <div className="flex justify-between">
-                <label className='swap' onClick={() => console.log('lol')}>
-                  <input type="checkbox" />
-                    <svg xmlns="http://www.w3.org/2000/svg" width="55" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="swap-off lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="55" height="30" viewBox="0 0 24 24" fill="#d10000" stroke="#d10000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="swap-on lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
-                    </svg>
-                </label>
-            <button className="btn bg-[#0C1014] border-0" style={{boxShadow : 'none'}} onClick={()=>(document.getElementById('comments') as HTMLDialogElement)?.showModal()}><MessageCircleMoreIcon className='size-7' /></button>
-          </div>
-        </div>
-      </dialog>
-      <CommentsModal/>
     </div>
     </>
 )

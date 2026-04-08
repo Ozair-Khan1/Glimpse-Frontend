@@ -25,6 +25,9 @@ interface Post {
   createdAt: string;
 }
 
+interface Story {
+  author: string;
+}
 
 export default function ProfileComp() {
 
@@ -34,6 +37,7 @@ export default function ProfileComp() {
 
   const {user} = useAuth()
 
+  const [isStory, setIsStory] = useState<Story[]>([])
 
   const [postLength, setPostLength] = useState(0)
 
@@ -58,6 +62,19 @@ useEffect(() => {
     }
   }
 
+  const getMyStory = async () => {
+
+    try {
+      const res = await api.get('/api/story/my-story')
+
+      setIsStory(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  getMyStory()
   handlePost()
 }, [])
 
@@ -79,7 +96,7 @@ try {
 }
 
 return (
-    <div className="flex flex-col items-center w-screen min-h-screen text-white overflow-x-hidden lg:mt-0 md:mt-0 sm:mt-0 mt-15">
+    <div className="flex flex-col items-center w-full min-h-screen text-white overflow-x-hidden lg:mt-0 md:mt-0 sm:mt-0 mt-15">
       
       <div className="max-w-4xl w-full pt-8 pb-12 px-4 flex change-direction-id lg:flex md:flex-row sm:flex-row justify-center align-middle items-center gap-8 md:gap-8 overflow-hidden">
           
@@ -104,7 +121,13 @@ return (
           
           <div className="flex justify-center lg:justify-start md:justify-start sm:justify-start change-bio-displa items-center gap-4">
             <h1 className="text-xl font-semibold">{user?.username}</h1>
-            <button className="btn btn-primary" onClick={() => (document.getElementById('create-story') as HTMLDialogElement)?.showModal()}>Add Story</button>
+            {isStory.length > 0 ? (
+              isStory.map((story) => (
+                <button key={story.author} className="btn btn-primary" onClick={() => (document.getElementById('create-story') as HTMLDialogElement)?.showModal()}>Change story</button>
+              ))
+            ) : (
+              <button className="btn btn-primary" onClick={() => (document.getElementById('create-story') as HTMLDialogElement)?.showModal()}>Add story</button>
+            )}
           </div>
 
           <div className="flex justify-evenly gap-10 md:justify-start sm:justify-evenly md:gap-10 text-base">

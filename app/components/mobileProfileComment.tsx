@@ -48,7 +48,7 @@ const MobileProfileComment = ({postId}) => {
       await api.get(`/api/post/get-comments/${postId}`)
 
       if (res.data.comments) {
-          getComments()
+        getComments()
       }
 
       setFormData('')
@@ -56,7 +56,8 @@ const MobileProfileComment = ({postId}) => {
     } catch (error) {
       console.log(error)
     } finally {
-        setAdding(false)
+      setFormData('')
+      setAdding(false)
     }
     
 
@@ -75,10 +76,11 @@ const MobileProfileComment = ({postId}) => {
       }
 
     }
+    
     useEffect(() => {
-        if(postId) {
-            getComments()
-        }
+      if(postId) {
+      getComments()
+    }
     }, [postId])
 
   return (
@@ -129,13 +131,13 @@ const MobileProfileComment = ({postId}) => {
                 value={formData}
                 onChange={(e) => {setFormData(e.target.value); setError(false)}}
                 className={`input input-bordered w-full bg-[#161b22] focus:outline-none h-11 ${error ? 'border-red-500' : 'border-gray-700 text-sm focus:border-green-600'}`}
-                disabled={adding}
               />
               <button 
               type="submit" 
               className="btn bg-green-700 hover:bg-green-600 border-none text-white px-6 h-11 min-h-0"
+              disabled={adding}
             >
-              Post
+              {adding ? <span className="loading loading-infinity loading-xl"></span> : 'Add'}
             </button>
             </div>
           </form>

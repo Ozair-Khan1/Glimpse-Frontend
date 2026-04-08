@@ -146,7 +146,7 @@ try {
 }
 
 return (
-    <div className="flex flex-col items-center w-screen min-h-screen text-white overflow-x-hidden lg:mt-0 md:mt-0 sm:mt-0 mt-15">
+    <div className="flex flex-col items-center max-w-[1460px] w-full min-h-screen text-white overflow-x-hidden lg:mt-0 md:mt-0 sm:mt-0 mt-15">
       
       <div className="max-w-4xl w-full pt-8 pb-12 px-4 flex change-direction-id lg:flex-row md:flex-row sm:flex-row justify-center gap-8 align-middle items-center  overflow-hidden">
 

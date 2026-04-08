@@ -137,7 +137,7 @@ export default function PostComments({postId, isActive}) {
                 className="btn bg-green-700 hover:bg-green-600 border-none text-white px-6 h-11 min-h-0"
                 disabled={adding}
               >
-                Post
+                {adding ? <span className="loading loading-infinity loading-xl"></span> : 'Add'}
             </button>
             </div>
           </form>
