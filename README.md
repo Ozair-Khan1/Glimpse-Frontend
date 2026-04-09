@@ -1,6 +1,6 @@
-Glimpse 📸
+[Glimpse](https://glimpse-pearl.vercel.app/)
 A Full-Stack Media Sharing & Social Ecosystem
-[link](https://glimpse-pearl.vercel.app/)
+
 
 Glimpse is a sophisticated social platform built to facilitate seamless visual storytelling. By moving away from managed backend services to a custom-built REST API, this project demonstrates high-level control over data architecture, secure authentication, and real-time social dynamics.
 
