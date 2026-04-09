@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Glimpse 📸
+A Full-Stack Media Sharing & Social Ecosystem
+[link](https://glimpse-pearl.vercel.app/)
 
-## Getting Started
+Glimpse is a sophisticated social platform built to facilitate seamless visual storytelling. By moving away from managed backend services to a custom-built REST API, this project demonstrates high-level control over data architecture, secure authentication, and real-time social dynamics.
 
-First, run the development server:
+🚀 Core Features
+Visual Storytelling: A dedicated "Stories" engine with ephemeral content delivery and smooth CSS scroll-snapping.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Dynamic Social Feed: A responsive, paginated feed supporting high-resolution image posts, likes, and threaded comments.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Relational Social Logic: A complex follow/unfollow system managing bi-directional user relationships and personalized content streams.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Secure Authentication: Custom JWT-based auth flow with HTTP-only cookies and SameSite/Secure flag configurations for cross-origin security.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Mobile-First Design: A fully responsive, component-driven UI optimized for everything from desktop monitors to mobile touchscreens.
 
-## Learn More
+🛠️ Tech Stack
+Frontend: React.js, Tailwind CSS, Lucide Icons
 
-To learn more about Next.js, take a look at the following resources:
+Backend: Node.js, Express.js
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Database: MongoDB, Mongoose (ODM)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Authentication: JSON Web Tokens (JWT), Bcrypt.js
 
-## Deploy on Vercel
+Deployment: Vercel (Frontend), Render/Railway (Backend)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🏗️ Architecture & Engineering
+1. Custom MERN Integration
+Replaced third-party BaaS providers with a custom Express/Node.js server to gain granular control over API performance and database indexing. This allowed for more complex query handling, such as populating user data across posts and comments.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. State & Media Management
+Utilized React’s functional components and hooks to manage local state for interactive elements (like/unlike toggles) to ensure the UI remains optimistic and fast, even during background API calls.
+
+3. Data Integrity
+Designed a scalable MongoDB schema that efficiently handles relational-style data—mapping followers, following, and post engagement—ensuring low-latency responses as the database grows.
