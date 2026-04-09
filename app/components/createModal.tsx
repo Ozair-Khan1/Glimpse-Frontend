@@ -169,7 +169,7 @@ export default function CreateModal({username, pfp}: User) {
                             className="w-full h-full flex-1 bg-transparent border-none outline-none resize-none text-sm text-white placeholder:text-[#8e8e8e]"
                         />
                         <span className="flex justify-between p-2 text-xs text-gray-500">{captionData?.caption?.length || 0} / 2200</span>
-                        <button type="button" onClick={handlePost} className="btn btn-success" disabled={loading}>Post</button>
+                        <button type="button" onClick={handlePost} className="btn btn-success" disabled={loading}>{loading ? <span className="loading loading-infinity loading-xl"></span> : 'Post'}t</button>
                     </div>
                 </div>
 

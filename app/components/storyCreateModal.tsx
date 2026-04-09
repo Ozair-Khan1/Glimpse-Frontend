@@ -134,7 +134,7 @@ export default function StoryCreateModal() {
                         />
                     </div>
                 ))}
-                    <button className="btn btn-success font-bold" onClick={handlePost} disabled={loading}>Add Story</button>
+                    <button className="btn btn-success font-bold" onClick={handlePost} disabled={loading}>{loading ? <span className="loading loading-infinity loading-xl"></span> : 'Add story'}</button>
             </div>
             )}
             </div>

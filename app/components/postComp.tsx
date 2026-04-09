@@ -154,7 +154,7 @@ export default function PostComp() {
                             </div>
                         )}
                     </div>
-                    <div className="relative aspect-4/5 w-full bg-zinc-900 z-0">
+                    <div className="relative aspect-4/5 w-full bg-black z-0">
                         <Image 
                         src={User.imageUrl} 
                         alt="Post content" 
@@ -187,7 +187,7 @@ export default function PostComp() {
                         
                         <div className="w-full text-wrap">
                             <p className="w-full text-sm">
-                                <Link href='/sidebar' className="font-bold mr-2">{User.author?.username}</Link>  
+                                <Link href={User.author._id === user?.user ? '/profile' : `/user/${User.author._id}`} className="font-bold mr-2">{User.author?.username}</Link>  
                                 {User.caption}
                             </p>
                         </div>
