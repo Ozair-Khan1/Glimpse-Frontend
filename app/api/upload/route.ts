@@ -10,8 +10,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       request,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
         return {
-          allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'],
-          maximumSizeInBytes: 100 * 1024 * 1024 // 100MB
+          maximumSizeInBytes: 250 * 1024 * 1024 // 250MB
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
