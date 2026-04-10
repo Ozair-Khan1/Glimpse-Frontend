@@ -14,7 +14,6 @@ export async function POST(request: Request): Promise<NextResponse> {
         };
       },
       onUploadCompleted: async () => {
-        // no-op — we handle DB writes separately via the Express backend
       },
     });
 

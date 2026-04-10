@@ -91,6 +91,8 @@ export default function PostComp() {
 
             const res = await api.get('/api/post/posts')
 
+            console.log(res.data)
+
             setSuggestedPost(res.data)
 
         } catch (error) {
