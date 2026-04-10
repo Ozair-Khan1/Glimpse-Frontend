@@ -13,12 +13,10 @@ export async function POST(request: Request): Promise<NextResponse> {
         // For now, we allow the upload as long as it's an image or video
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'],
-          maximumSizeInBytes: 100 * 1024 * 1024, // 100MB
-          validUntil: Date.now() + 5 * 60 * 1000, // Token valid for 5 minutes
+          maximumSizeInBytes: 100 * 1024 * 1024 // 100MB
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // You could register the upload completion here if needed
         console.log('Blob upload completed', blob.url);
       },
     });
