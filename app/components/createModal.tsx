@@ -4,7 +4,7 @@ import Image from "next/image"
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react"
 import api from "../utils/api";
 import CustomVideoPlayer from "./customVideoPlayer";
-import { upload } from '@vercel/blob/client';
+
 
 
 interface ImagePreview {
@@ -69,10 +69,20 @@ export default function CreateModal({ username, pfp }: User) {
         setLoading(true)
 
         try {
-            const blob = await upload(selectedFile.name, selectedFile, {
-                access: 'public',
-                handleUploadUrl: '/api/upload',
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            const uploadRes = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
             });
+
+            if (!uploadRes.ok) {
+                const errData = await uploadRes.json();
+                throw new Error(errData.error || 'Upload failed');
+            }
+
+            const blob = await uploadRes.json();
 
             await api.post('/api/post/create-post', {
                 imageUrl: blob.url,
