@@ -4,6 +4,7 @@ import Image from "next/image"
 import { ChangeEvent, useRef, useState } from "react"
 import api from "../utils/api";
 import CustomVideoPlayer from "./customVideoPlayer";
+import { upload } from "@vercel/blob/client";
 
 interface ImagePreview {
     url: string;
@@ -48,16 +49,18 @@ export default function StoryCreateModal() {
 
         if (!selectedFile) return
 
-        const formData = new FormData()
-
-
-        formData.append('image', selectedFile)
-
         setLoading(true)
 
         try {
 
-            await api.post('/api/story/add-story', formData);
+            const blob = await upload(selectedFile.name, selectedFile, {
+                access: 'public',
+                handleUploadUrl: '/api/upload',
+            });
+
+            await api.post('/api/story/add-story', {
+                imageUrl: blob.url
+            });
 
             (document.getElementById('create-story') as HTMLDialogElement).close();
             setStep(1);
