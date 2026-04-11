@@ -11,7 +11,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       onBeforeGenerateToken: async () => {
         return {
           tokenPayload: JSON.stringify({}),
-          allowOverwrite: true,
+          addRandomSuffix: true,
         };
       },
       onUploadCompleted: async () => {
