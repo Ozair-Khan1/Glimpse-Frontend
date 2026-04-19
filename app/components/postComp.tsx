@@ -63,7 +63,7 @@ export default function PostComp() {
         getPosts()
     }, [])
 
-    const handleLike = async (postId) => {
+    const handleLike = async (postId: string) => {
 
         try {
 

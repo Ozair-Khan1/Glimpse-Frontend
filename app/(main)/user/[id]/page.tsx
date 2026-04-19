@@ -128,7 +128,7 @@ export default function UserProfile() {
     handlePost()
   }, [id])
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId: string) => {
 
     try {
 

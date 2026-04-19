@@ -17,12 +17,12 @@ export default function FollowComp() {
     const [suggestedUsers, setSuggestedUsers] = useState<SuggestedUsers[]>([]);
 
     const [following, setFollowing] = useState<any>(null)
-    
+
     const [suggestedFollowing, setSuggestedFollowing] = useState(false)
 
     const [loading, setLoading] = useState('')
 
-    const {user} = useAuth()
+    const { user } = useAuth()
 
     useEffect(() => {
         const fetchSuggested = async () => {
@@ -40,13 +40,13 @@ export default function FollowComp() {
 
         fetchSuggested();
     }, []);
- 
+
     const handleFollow = async (userId: string) => {
 
         setLoading(userId)
 
         try {
-            
+
             const res = await api.post(`/api/auth/follow/${userId}`)
 
             setFollowing(res.data)
@@ -67,9 +67,9 @@ export default function FollowComp() {
                 <div className="flex items-center align-middle space-x-3 max-w-115 w-full gap-30">
                     <div className="flex gap-4 text-nowrap justify-between items-center align-middle">
                         <div className="avatar size-10">
-                              <div className="bg-white rounded-full">
-                             <Image src={user?.pfp || 'https://ik.imagekit.io/glimpse/avatar.png'} alt="User" width={64} height={64} className="object-cover" />
-                             </div>
+                            <div className="bg-white rounded-full">
+                                <Image src={user?.pfp || 'https://ik.imagekit.io/glimpse/avatar.png'} alt="User" width={64} height={64} className="object-cover" />
+                            </div>
                         </div>
                         <Link href='/profile'>{user?.username}</Link>
                     </div>
@@ -81,29 +81,29 @@ export default function FollowComp() {
                     </div>
                 ) : (
                     suggestedUsers.length > 0 ? (
-                    suggestedUsers.map((User) => (
-                        <div key={User._id} className="flex items-center align-middle justify-between space-x-3 max-w-[318px] w-full">
-                            <div className="flex gap-4 text-nowrap items-center align-middle">
-                                <div className="avatar size-10">
-                                     <div className="bg-white rounded-full">
-                                    <Image src={User.profilePicture} alt="User" width={64} height={64} className="object-cover" />
-                                     </div>
+                        suggestedUsers.map((User) => (
+                            <div key={User._id} className="flex items-center align-middle justify-between space-x-3 max-w-[318px] w-full">
+                                <div className="flex gap-4 text-nowrap items-center align-middle">
+                                    <div className="avatar size-10">
+                                        <div className="bg-white rounded-full">
+                                            <Image src={User.profilePicture} alt="User" width={64} height={64} className="object-cover" />
+                                        </div>
+                                    </div>
+                                    <Link href={`/user/${User._id}`}>{User.username}</Link>
                                 </div>
-                                 <Link href={`/user/${User._id}`}>{User.username}</Link>
+                                <div className="block">
+                                    <button disabled={loading === User._id} className="btn btn-primary" onClick={() => handleFollow(User?._id)}> {following?.user.followers.includes(user?.user) ? 'Unfollow' : 'Follow'} </button>
+                                </div>
                             </div>
-                            <div className="block">
-                                <button disabled={loading === User._id} className="btn btn-primary" onClick={() => handleFollow(User?._id)}> {following?.user.followers.includes(user?.user) ? 'Unfollow' : 'Follow'} </button>
-                            </div>
+                        ))
+                    ) : (
+                        <div className="flex justify-center items-center">
+                            <span>No Users Found</span>
                         </div>
-                    ))
-                ) : (
-                    <div className="flex justify-center items-center">
-                        <span>No Users Found</span>
-                    </div>
-                )
-                )}  
+                    )
+                )}
                 <div className="block mt-4">
-                <p className="text-gray-400">© 2026 Glimpse from <Link href='https://ok-folio.vercel.app/' className="text-[#0D6EFD] font-bold hover:text-[#0446aa] transition-all duration-200" target="_blank">OK-Folio</Link></p>
+                    <p className="text-gray-400">© 2026 Glimpse from <Link href='https://ok-folio.vercel.app/' className="text-[#0D6EFD] font-bold hover:text-[#0446aa] transition-all duration-200" target="_blank">OK-Folio</Link></p>
                 </div>
             </div>
         </>

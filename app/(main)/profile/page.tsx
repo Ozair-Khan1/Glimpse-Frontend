@@ -78,7 +78,7 @@ export default function ProfileComp() {
     handlePost()
   }, [])
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId: string) => {
 
     try {
 
@@ -102,7 +102,7 @@ export default function ProfileComp() {
 
         <div className="w-[150px] h-[150px] rounded-full">
           <div className="w-full h-full rounded-full p-1">
-            <div className="relative avatar w-full h-full border-2 border-black rounded-full">
+            <div className="relative avatar w-full h-full border-2 border-black rounded-full bg-white">
               <Image
                 src={user?.pfp || 'https://ik.imagekit.io/glimpse/avatar.png'}
                 alt="Profile Picture"

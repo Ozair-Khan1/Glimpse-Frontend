@@ -78,7 +78,7 @@ export default function StoriesComp() {
     getStory()
   }, [])
 
-  const handleLike = async (_id) => {
+  const handleLike = async (_id: string) => {
 
     try {
 
